@@ -50,10 +50,13 @@ jobs:
           cp source/Breathe2Unlock_Flutter/analysis_options.yaml "$FLUTTER_PROJECT/analysis_options.yaml"
           rm -rf "$FLUTTER_PROJECT/lib"
           cp -a source/Breathe2Unlock_Flutter/lib "$FLUTTER_PROJECT/lib"
+          rm -rf "$FLUTTER_PROJECT/test"
           mkdir -p "$FLUTTER_PROJECT/test"
           cp -a source/Breathe2Unlock_Flutter/test/. "$FLUTTER_PROJECT/test/"
           cp source/Breathe2Unlock_Flutter/android_custom/AndroidManifest.xml "$FLUTTER_PROJECT/android/app/src/main/AndroidManifest.xml"
           cp -a source/Breathe2Unlock_Flutter/android_custom/app/src/main/. "$FLUTTER_PROJECT/android/app/src/main/"
+          # Correct a missing closing parenthesis in the app-picker widget.
+          sed -i "s/child: const Text('Save protected apps')),/child: const Text('Save protected apps'))),/" "$FLUTTER_PROJECT/lib/main.dart"
           python3 - <<'PY'
           from pathlib import Path
           p = Path('build-app/android/app/build.gradle.kts')
