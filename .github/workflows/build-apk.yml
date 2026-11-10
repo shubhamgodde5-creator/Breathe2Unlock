@@ -43,6 +43,8 @@ jobs:
           mkdir -p build-src
           tar -xzf .build/source.tar.gz -C build-src
           test -f build-src/Breathe2Unlock/app/build.gradle.kts
+          # ML Kit exposes PoseDetectorOptions from the defaults package.
+          sed -i 's/com.google.mlkit.vision.pose.PoseDetectorOptions/com.google.mlkit.vision.pose.defaults.PoseDetectorOptions/' build-src/Breathe2Unlock/app/src/main/java/com/breathe2unlock/breathing/CameraBreathPreview.kt
 
       - name: Run tests and assemble debug APK
         working-directory: build-src/Breathe2Unlock
