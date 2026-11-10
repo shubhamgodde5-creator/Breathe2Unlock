@@ -6,6 +6,8 @@ on:
     paths:
       - '.build/flutter-source.part*.b64'
       - '.github/workflows/build-flutter-apk.yml'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
