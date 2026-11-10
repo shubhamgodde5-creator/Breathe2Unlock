@@ -22,8 +22,6 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      # GitHub's Ubuntu Android runner image already includes command-line tools.
-      # Avoid android-actions/setup-android's obsolete "tools" package request.
       - name: Configure Android SDK
         run: |
           echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"
@@ -41,11 +39,9 @@ jobs:
           gradle-version: '8.9'
 
       - name: Restore source archive
-        shell: bash
         run: |
-          cat .build/source.*.b64 | tr -d '\n' | base64 --decode > source.tar.gz
           mkdir -p build-src
-          tar -xzf source.tar.gz -C build-src
+          tar -xzf .build/source.tar.gz -C build-src
           test -f build-src/Breathe2Unlock/app/build.gradle.kts
 
       - name: Run tests and assemble debug APK
