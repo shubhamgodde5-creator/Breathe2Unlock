@@ -103,3 +103,4 @@ Breathe2Unlock/
 ## Build an APK without Android Studio
 
 A GitHub Actions workflow is included at `.github/workflows/build-apk.yml`. See [CLOUD_BUILD.md](CLOUD_BUILD.md) for the cloud build and artifact download steps. This requires the project to be in a GitHub repository with Actions enabled.
+# Trigger build
