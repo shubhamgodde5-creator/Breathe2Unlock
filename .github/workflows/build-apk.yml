@@ -22,6 +22,11 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
       - name: Set up Android SDK
         run: |
           # Install Android SDK manually with known working versions
@@ -36,13 +41,6 @@ jobs:
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
           yes | sdkmanager --licenses
           sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;27.2.12479018"
-
-      - name: Generate Gradle Wrapper
-        run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-          gradle wrapper --gradle-version 8.9
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
