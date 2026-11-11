@@ -31,6 +31,9 @@ jobs:
             ndk;27.2.12479018
             cmdline-tools;latest
 
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper --gradle-version 8.9
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
