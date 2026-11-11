@@ -21,14 +21,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Android SDK
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -qq -y android-sdk
-          echo "ANDROID_HOME=/usr/lib/android-sdk" >> $GITHUB_ENV
-          echo "/usr/lib/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          yes | sdkmanager --licenses > /dev/null
-          sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;27.2.12479018" "cmdline-tools;latest"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-35 build-tools;35.0.0 ndk;27.2.12479018 cmdline-tools;latest'
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -39,7 +35,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug --stacktrace --info
+        run: ./gradlew :app:assembleDebug --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
