@@ -1,0 +1,1 @@
+Temporary CI trigger for the microphone + proximity Flutter Android build. The app source and build workflow are already present on main.
