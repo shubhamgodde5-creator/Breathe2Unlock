@@ -1,0 +1,67 @@
+name: Build and Release APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 35
+          build-tools-version: '35.0.0'
+          ndk-version: r27c
+
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper --gradle-version 8.9
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew :app:assembleDebug --stacktrace
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Breathe2Unlock-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
+
+      - name: Create Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "Breathe2Unlock Debug Build #${{ github.run_number }}"
+          body: |
+            Debug APK built from commit ${{ github.sha }}
+
+            **Installation:**
+            1. Download `Breathe2Unlock-debug-apk` from the assets below
+            2. Extract the zip
+            3. Install `app-debug.apk` on your Android device
+            4. Allow installation from unknown sources if prompted
+
+            **Note:** This is a debug-signed APK for personal testing only.
+          files: app/build/outputs/apk/debug/app-debug.apk
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
