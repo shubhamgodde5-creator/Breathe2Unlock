@@ -24,10 +24,13 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: 'platforms;android-35,build-tools;35.0.0'
+          packages: 'platforms;android-35,build-tools;35.0.0,ndk;27.2.12479018'
+          cmdline-tools-version: '13.0'
 
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper --gradle-version 8.9
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
